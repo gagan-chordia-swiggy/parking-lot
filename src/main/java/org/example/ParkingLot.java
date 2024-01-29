@@ -17,7 +17,7 @@ public class ParkingLot {
         this.nextSlotAvailable = 1;
     }
 
-    public void parkCar(Car car) {
+    public void park(Car car) {
         if (isCarParked(car)) {
             throw new IllegalArgumentException("Same car cannot be parked again");
         }
@@ -58,11 +58,12 @@ public class ParkingLot {
         return count;
     }
 
-    public void unparkCar(Car car) {
+    public Car unpark(String registrationNumber) {
         for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().equals(car)) {
+            if (entry.getValue() != null && entry.getValue().registrationNumber().equals(registrationNumber)) {
+                Car car = entry.getValue();
                 parkingSlots.put(entry.getKey(), null);
-                return;
+                return car;
             }
         }
 
