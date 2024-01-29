@@ -44,10 +44,10 @@ public class ParkingLotTest {
         Car car = new Car("AP00AD1234", Color.BLUE);
 
         // Act
-        int actual = parkingLot.park(car);
+        String actual = parkingLot.park(car);
 
         // Assert
-        assertEquals(1, actual);
+        assertEquals("1", actual);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ParkingLotTest {
         Car car = new Car("AB12BC1234", Color.RED);
 
         // Act
-        int slotNumber = parkingLot.park(car);
+        String slotNumber = parkingLot.park(car);
         Car unparkedCar = parkingLot.unpark(slotNumber,"AB12BC1234");
 
         // Assert
@@ -154,7 +154,7 @@ public class ParkingLotTest {
         parkingLot.park(car2);
 
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> parkingLot.unpark(2,"CB12AA1234"));
+        assertThrows(IllegalArgumentException.class, () -> parkingLot.unpark("2","CB12AA1234"));
     }
 
     @Test
@@ -168,7 +168,7 @@ public class ParkingLotTest {
         // Act
         parkingLot.park(car1);
         parkingLot.park(car2);
-        parkingLot.unpark(1, "AB12BC1234");
+        parkingLot.unpark("1", "AB12BC1234");
         parkingLot.park(car);
 
         boolean actual = parkingLot.isCarParked(car);

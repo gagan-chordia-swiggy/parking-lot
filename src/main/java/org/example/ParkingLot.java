@@ -3,7 +3,7 @@ package org.example;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParkingLot {
+public class ParkingLot implements org.example.interfaces.IParkingLot {
     private final Map<Integer, Car> parkingSlots;
     private final int capacity;
     private int nextSlotAvailable;
@@ -17,20 +17,22 @@ public class ParkingLot {
         this.nextSlotAvailable = 1;
     }
 
-    public int park(Car car) {
+    public String park(Car car) {
         checkForSameCarParked(car);
 
-        for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
-            if (entry.getValue() == null) {
-                parkingSlots.put(entry.getKey(), car);
-                return entry.getKey();
-            }
+        Integer slot = hasEmptySlot().getOrDefault(true, null);
+
+        if (slot != null) {
+            parkingSlots.put(slot, car);
+            return slot.toString();
         }
 
-        isAtFullCapacity();
+        if (isAtFullCapacity()) {
+            throw new RuntimeException();
+        }
 
         parkingSlots.put(this.nextSlotAvailable, car);
-        return this.nextSlotAvailable++;
+        return Integer.toString(this.nextSlotAvailable++);
     }
 
     public boolean isCarParked(Car carToBeChecked) {
@@ -54,25 +56,34 @@ public class ParkingLot {
         return count;
     }
 
-    public Car unpark(int slotNumber, String registrationNumber) {
-        Car car = parkingSlots.get(slotNumber);
+    public Car unpark(String slotNumber, String registrationNumber) {
+        int slot = Integer.parseInt(slotNumber);
+        Car car = parkingSlots.get(slot);
         if (car != null && car.registrationNumber().equals(registrationNumber)) {
-            parkingSlots.put(slotNumber, null);
+            parkingSlots.put(slot, null);
             return car;
         }
 
         throw new IllegalArgumentException("Car not found. Thus, cannot be unparked");
     }
 
+    public boolean isAtFullCapacity() {
+        return this.nextSlotAvailable > this.capacity;
+    }
+
+    public Map<Boolean, Integer> hasEmptySlot() {
+        for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
+            if (entry.getValue() == null) {
+                return Map.of(true, entry.getKey());
+            }
+        }
+
+        return Map.of(false, -1);
+    }
+
     private void checkForSameCarParked(Car car) {
         if (isCarParked(car)) {
             throw new IllegalArgumentException("Same car cannot be parked again");
-        }
-    }
-
-    private void isAtFullCapacity() {
-        if (this.nextSlotAvailable > this.capacity) {
-            throw new RuntimeException("Full capacity");
         }
     }
 }
