@@ -23,7 +23,11 @@ public class MultiLevelParkingLot implements IParkingLot {
     public String park(Car car) {
         StringBuilder slot = new StringBuilder();
 
-        for (int ii = 0; ii < levels; ii++) {
+        for (int ii = 0; ii < this.levels; ii++) {
+            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity()) {
+                throw new RuntimeException();
+            }
+
             if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlot().containsKey(true)) {
                 slot.append(ii);
                 slot.append(" - ");

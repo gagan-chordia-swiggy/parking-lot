@@ -91,6 +91,22 @@ public class MultiLevelParkingLotTest {
     }
 
     @Test
+    void testCarCannotBeParkedInFullCapacity() {
+        // Arrange
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        Car car1 = new Car("AB12FR1234", Color.WHITE);
+        Car car2 = new Car("AA12FR1234", Color.WHITE);
+        Car car = new Car("AA34FA1234", Color.GREEN);
+
+        // Act
+        multiLevelParkingLot.park(car1);
+        multiLevelParkingLot.park(car2);
+
+        // Assert
+        assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car));
+    }
+
+    @Test
     void test3WhiteCarsArePresentInMultiLevelParkingLot() {
         // Arrange
         MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
