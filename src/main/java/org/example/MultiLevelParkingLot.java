@@ -43,6 +43,12 @@ public class MultiLevelParkingLot implements IParkingLot {
 
     @Override
     public boolean isCarParked(Car car) {
+        for (int ii = 0; ii < levels; ii++) {
+            if (this.parkingLots[ii].isCarParked(car)) {
+                return true;
+            }
+        }
+
         return false;
     }
 

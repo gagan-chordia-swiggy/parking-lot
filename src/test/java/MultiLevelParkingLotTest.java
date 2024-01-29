@@ -3,7 +3,11 @@ import org.example.Color;
 import org.example.MultiLevelParkingLot;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MultiLevelParkingLotTest {
     @Test
@@ -51,5 +55,38 @@ public class MultiLevelParkingLotTest {
 
         // Assert
         assertEquals("0 - 1", actual);
+    }
+
+    @Test
+    void testCarIsParkedInMultiLevelCarParking() {
+        // Arrange
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        Car car1 = new Car("AB12FR1234", Color.WHITE);
+        Car car2 = new Car("AA12FR1234", Color.WHITE);
+
+        // Act
+        multiLevelParkingLot.park(car1);
+        multiLevelParkingLot.park(car2);
+        boolean actual = multiLevelParkingLot.isCarParked(car2);
+
+        // Assert
+        assertTrue(actual);
+    }
+
+    @Test
+    void testCarIsNotParkedInMultiLevelCarParking() {
+        // Arrange
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        Car car1 = new Car("AB12FR1234", Color.WHITE);
+        Car car2 = new Car("AA12FR1234", Color.WHITE);
+        Car car = new Car("AA34FA1234", Color.GREEN);
+
+        // Act
+        multiLevelParkingLot.park(car1);
+        multiLevelParkingLot.park(car2);
+        boolean actual = multiLevelParkingLot.isCarParked(car);
+
+        // Assert
+        assertFalse(actual);
     }
 }
