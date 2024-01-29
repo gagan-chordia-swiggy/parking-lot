@@ -20,7 +20,7 @@ public class ParkingLot implements org.example.interfaces.IParkingLot {
     public String park(Car car) {
         checkForSameCarParked(car);
 
-        Integer slot = hasEmptySlot().getOrDefault(true, null);
+        Integer slot = getEmptySlot().getOrDefault(true, null);
 
         if (slot != null) {
             parkingSlots.put(slot, car);
@@ -71,7 +71,7 @@ public class ParkingLot implements org.example.interfaces.IParkingLot {
         return this.nextSlotAvailable > this.capacity;
     }
 
-    public Map<Boolean, Integer> hasEmptySlot() {
+    public Map<Boolean, Integer> getEmptySlot() {
         for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
             if (entry.getValue() == null) {
                 return Map.of(true, entry.getKey());

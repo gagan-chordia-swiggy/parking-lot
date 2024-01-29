@@ -1,8 +1,9 @@
+import org.example.Car;
+import org.example.Color;
 import org.example.MultiLevelParkingLot;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MultiLevelParkingLotTest {
     @Test
@@ -37,5 +38,18 @@ public class MultiLevelParkingLotTest {
     @Test
     void testMultiLevelParkingLotWithNegative15LevelThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(-15, 12));
+    }
+
+    @Test
+    void testParkingAtInitialLevelShouldReturnSlot() {
+        // Arrange
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        Car car = new Car("AB12FR1234", Color.WHITE);
+
+        // Act
+        String actual = multiLevelParkingLot.park(car);
+
+        // Assert
+        assertEquals("0 - 1", actual);
     }
 }
