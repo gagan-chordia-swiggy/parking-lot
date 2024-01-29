@@ -6,6 +6,7 @@ import java.util.Map;
 public class ParkingLot {
     private final Map<Integer, Car> parkingSlots;
     private final int capacity;
+    private int nextSlotAvailable;
 
     public ParkingLot(int capacity) {
         if(capacity < 1) {
@@ -13,5 +14,21 @@ public class ParkingLot {
         }
         this.capacity = capacity;
         this.parkingSlots = new HashMap<>();
+        this.nextSlotAvailable = 1;
+    }
+
+    public void parkCar(Car car) {
+        parkingSlots.put(nextSlotAvailable, car);
+        ++nextSlotAvailable;
+    }
+
+    public boolean isCarParked(Car carToBeChecked) {
+        for (Car car : parkingSlots.values()) {
+            if (car != null && car.equals(carToBeChecked)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

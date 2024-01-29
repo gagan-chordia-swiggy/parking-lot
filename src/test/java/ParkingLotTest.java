@@ -1,8 +1,11 @@
+import org.example.Car;
+import org.example.Color;
 import org.example.ParkingLot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ParkingLotTest {
     @Test
@@ -30,5 +33,19 @@ public class ParkingLotTest {
     void testParkingLotWithNegative1Slots() {
         // Assert
         assertThrows(IllegalArgumentException.class, () -> new ParkingLot(-1));
+    }
+
+    @Test
+    void testACarIsParkedInTheParkingSlot() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(10);
+        Car car = new Car("AP00AD1234", Color.BLUE);
+
+        // Act
+        parkingLot.parkCar(car);
+        boolean actual = parkingLot.isCarParked(car);
+
+        // Assert
+        assertTrue(actual);
     }
 }
