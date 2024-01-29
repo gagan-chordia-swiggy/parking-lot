@@ -103,7 +103,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    void testParkingTheSameCarTwiceWithoutUnparking() {
+    void testParkingTheSameCarTwiceWithoutUnparkingThrowsException() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(3);
         Car car = new Car("AB12CD1234", Color.BLUE);
@@ -113,5 +113,19 @@ public class ParkingLotTest {
 
         // Assert
         assertThrows(IllegalArgumentException.class, () -> parkingLot.parkCar(car));
+    }
+
+    @Test
+    void testParkingACarInFullCapacityParkingLotThrowsException() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(1);
+        Car car1 = new Car("AB12CD1234", Color.BLUE);
+        Car car2 = new Car("AA12CD1234", Color.BLACK);
+
+        // Act
+        parkingLot.parkCar(car1);
+
+        // Assert
+        assertThrows(RuntimeException.class, () -> parkingLot.parkCar(car2));
     }
 }

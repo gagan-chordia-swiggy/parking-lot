@@ -21,6 +21,11 @@ public class ParkingLot {
         if (isCarParked(car)) {
             throw new IllegalArgumentException("Same car cannot be parked again");
         }
+
+        if (nextSlotAvailable > capacity) {
+            throw new RuntimeException("Full capacity");
+        }
+
         parkingSlots.put(nextSlotAvailable, car);
         ++nextSlotAvailable;
     }
