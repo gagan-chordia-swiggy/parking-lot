@@ -22,6 +22,13 @@ public class ParkingLot {
             throw new IllegalArgumentException("Same car cannot be parked again");
         }
 
+        for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
+            if (entry.getValue() == null) {
+                parkingSlots.put(entry.getKey(), car);
+                return;
+            }
+        }
+
         if (nextSlotAvailable > capacity) {
             throw new RuntimeException("Full capacity");
         }
