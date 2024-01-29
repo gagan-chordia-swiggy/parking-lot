@@ -23,4 +23,9 @@ public class MultiLevelParkingLotTest {
     void testMultiLevelParkingLotWithNegativeCapacityThrowsError() {
         assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, -1));
     }
+
+    @Test
+    void testMultiLevelParkingLotWithZeroLevelsThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(0, 12));
+    }
 }

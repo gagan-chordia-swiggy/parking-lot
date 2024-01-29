@@ -2,13 +2,17 @@ package org.example;
 
 public class MultiLevelParkingLot {
     private final ParkingLot[] parkingLots;
-    private final int totalLots;
+    private final int levels;
 
-    public MultiLevelParkingLot(int totalLots, int capacityOfParkingLots) {
-        this.totalLots = totalLots;
-        this.parkingLots = new ParkingLot[totalLots];
+    public MultiLevelParkingLot(int levels, int capacityOfParkingLots) {
+        if (levels == 0) {
+            throw new IllegalArgumentException();
+        }
 
-        for (int ii = 0; ii < totalLots; ii++) {
+        this.levels = levels;
+        this.parkingLots = new ParkingLot[levels];
+
+        for (int ii = 0; ii < levels; ii++) {
             this.parkingLots[ii] = new ParkingLot(capacityOfParkingLots);
         }
     }
