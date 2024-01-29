@@ -8,6 +8,9 @@ public class ParkingLot {
     private final int capacity;
 
     public ParkingLot(int capacity) {
+        if(capacity == 0) {
+            throw new IllegalArgumentException();
+        }
         this.capacity = capacity;
         this.parkingSlots = new HashMap<>();
     }
