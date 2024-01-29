@@ -74,6 +74,28 @@ public class MultiLevelParkingLotTest {
     }
 
     @Test
+    void testCarIsParkedInAnEmptySlotFromUnparkedLot() {
+        // Arrange
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        Car car1 = new Car("AB12FR1234", Color.WHITE);
+        Car car2 = new Car("AA12FR1234", Color.WHITE);
+        Car car3 = new Car("AA34FA1234", Color.GREEN);
+        Car car4 = new Car("BB12IO9087", Color.WHITE);
+        Car car = new Car("BC12IO9087", Color.WHITE);
+
+        // Act
+        multiLevelParkingLot.park(car1);
+        multiLevelParkingLot.park(car2);
+        String parkingSlot = multiLevelParkingLot.park(car3);
+        multiLevelParkingLot.park(car4);
+        multiLevelParkingLot.unpark(parkingSlot, "AA34FA1234");
+        String actual = multiLevelParkingLot.park(car);
+
+        // Assert
+        assertEquals(parkingSlot, actual);
+    }
+
+    @Test
     void testCarIsNotParkedInMultiLevelCarParking() {
         // Arrange
         MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);

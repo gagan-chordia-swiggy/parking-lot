@@ -24,7 +24,7 @@ public class MultiLevelParkingLot implements IParkingLot {
         StringBuilder slot = new StringBuilder();
 
         for (int ii = 0; ii < this.levels; ii++) {
-            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity()) {
+            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && !this.parkingLots[ii].getEmptySlot().containsKey(true)) {
                 throw new RuntimeException();
             }
 
