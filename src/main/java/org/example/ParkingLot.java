@@ -31,4 +31,15 @@ public class ParkingLot {
 
         return false;
     }
+
+    public int countCarsByColor(Color color) {
+        int count = 0;
+        for (Car car : parkingSlots.values()) {
+            if (car != null && car.color().equals(color)) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
 }

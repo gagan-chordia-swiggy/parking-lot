@@ -3,6 +3,7 @@ import org.example.Color;
 import org.example.ParkingLot;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,5 +62,43 @@ public class ParkingLotTest {
 
         // Assert
         assertFalse(actual);
+    }
+
+    @Test
+    void test2BlueCarsPresentInTheParkingLot() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(5);
+        Car car1 = new Car("AB12CD1234", Color.BLUE);
+        Car car2 = new Car("AB12CD1224", Color.BLUE);
+        Car car3 = new Car("AB02CD1234", Color.BLACK);
+
+        // Act
+        parkingLot.parkCar(car1);
+        parkingLot.parkCar(car2);
+        parkingLot.parkCar(car3);
+
+        int actual = parkingLot.countCarsByColor(Color.BLUE);
+
+        // Assert
+        assertEquals(2, actual);
+    }
+
+    @Test
+    void test0BlackCarsPresentInTheParkingLot() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(5);
+        Car car1 = new Car("AB12CD1234", Color.BLUE);
+        Car car2 = new Car("AB12CD1224", Color.BLUE);
+        Car car3 = new Car("AB02CD1234", Color.GREEN);
+
+        // Act
+        parkingLot.parkCar(car1);
+        parkingLot.parkCar(car2);
+        parkingLot.parkCar(car3);
+
+        int actual = parkingLot.countCarsByColor(Color.BLACK);
+
+        // Assert
+        assertEquals(0, actual);
     }
 }
