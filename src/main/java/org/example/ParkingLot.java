@@ -58,5 +58,7 @@ public class ParkingLot {
                 return;
             }
         }
+
+        throw new IllegalArgumentException("Car not found. Thus, cannot be unparked");
     }
 }

@@ -142,4 +142,20 @@ public class ParkingLotTest {
         // Assert
         assertFalse(parkingLot.isCarParked(car));
     }
+
+    @Test
+    void testUnparkingACarNotPresentThrowsException() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(2);
+        Car car1 = new Car("AB12BC1234", Color.RED);
+        Car car2 = new Car("AA12BC1234", Color.RED);
+        Car car = new Car("CB12AA1234", Color.RED);
+
+        // Act
+        parkingLot.parkCar(car1);
+        parkingLot.parkCar(car2);
+
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> parkingLot.unparkCar(car));
+    }
 }
