@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ParkingLotTest {
     @Test
@@ -41,11 +42,10 @@ public class ParkingLotTest {
     void testACarIsParkedInTheParkingLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(10);
-        Car car = new Car("AP00AD1234", Color.BLUE);
+        Car car1 = mock(Car.class);
 
         // Act
-        String actual = parkingLot.park(car);
-
+        String actual = parkingLot.park(car1);
         // Assert
         assertEquals("1", actual);
     }
@@ -54,7 +54,7 @@ public class ParkingLotTest {
     void testACarIsNotPresentInTheParkingLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(1);
-        Car car = new Car("AP00AD1234", Color.BLUE);
+        Car car = mock(Car.class);
 
         // Act
         boolean actual = parkingLot.isCarParked(car);
@@ -67,11 +67,14 @@ public class ParkingLotTest {
     void test2BlueCarsPresentInTheParkingLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(5);
-        Car car1 = new Car("AB12CD1234", Color.BLUE);
-        Car car2 = new Car("AB12CD1224", Color.BLUE);
-        Car car3 = new Car("AB02CD1234", Color.BLACK);
+        Car car1 = mock(Car.class);
+        Car car2 = mock(Car.class);
+        Car car3 = mock(Car.class);
 
         // Act
+        when(car1.color()).thenReturn(Color.BLUE);
+        when(car2.color()).thenReturn(Color.BLUE);
+        when(car3.color()).thenReturn(Color.BLACK);
         parkingLot.park(car1);
         parkingLot.park(car2);
         parkingLot.park(car3);
@@ -86,11 +89,14 @@ public class ParkingLotTest {
     void test0BlackCarsPresentInTheParkingLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(5);
-        Car car1 = new Car("AB12CD1234", Color.BLUE);
-        Car car2 = new Car("AB12CD1224", Color.BLUE);
-        Car car3 = new Car("AB02CD1234", Color.GREEN);
+        Car car1 = mock(Car.class);
+        Car car2 = mock(Car.class);
+        Car car3 = mock(Car.class);
 
         // Act
+        when(car1.color()).thenReturn(Color.BLUE);
+        when(car2.color()).thenReturn(Color.BLUE);
+        when(car3.color()).thenReturn(Color.BLUE);
         parkingLot.park(car1);
         parkingLot.park(car2);
         parkingLot.park(car3);
@@ -105,7 +111,7 @@ public class ParkingLotTest {
     void testParkingTheSameCarTwiceWithoutUnparkingThrowsException() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(3);
-        Car car = new Car("AB12CD1234", Color.BLUE);
+        Car car = mock(Car.class);
 
         // Act
         parkingLot.park(car);
@@ -118,8 +124,8 @@ public class ParkingLotTest {
     void testParkingACarInFullCapacityParkingLotThrowsException() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(1);
-        Car car1 = new Car("AB12CD1234", Color.BLUE);
-        Car car2 = new Car("AA12CD1234", Color.BLACK);
+        Car car1 = mock(Car.class);
+        Car car2 = mock(Car.class);
 
         // Act
         parkingLot.park(car1);
@@ -132,9 +138,10 @@ public class ParkingLotTest {
     void testUnparkingACar() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(2);
-        Car car = new Car("AB12BC1234", Color.RED);
+        Car car = mock(Car.class);
 
         // Act
+        when(car.registrationNumber()).thenReturn("AB12BC1234");
         String slotNumber = parkingLot.park(car);
         Car unparkedCar = parkingLot.unpark(slotNumber,"AB12BC1234");
 
@@ -149,6 +156,7 @@ public class ParkingLotTest {
         Car car1 = new Car("AB12BC1234", Color.RED);
         Car car2 = new Car("AA12BC1234", Color.RED);
 
+
         // Act
         parkingLot.park(car1);
         parkingLot.park(car2);
@@ -161,19 +169,18 @@ public class ParkingLotTest {
     void testParkingACarInUnparkedLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(2);
-        Car car1 = new Car("AB12BC1234", Color.RED);
-        Car car2 = new Car("AA12BC1234", Color.RED);
-        Car car = new Car("CB12AA1234", Color.RED);
+        Car car1 = mock(Car.class);
+        Car car2 = mock(Car.class);
+        Car car = mock(Car.class);
 
         // Act
-        parkingLot.park(car1);
+        when(car1.registrationNumber()).thenReturn("AB12BC1234");
+        String unparkedLot = parkingLot.park(car1);
         parkingLot.park(car2);
-        parkingLot.unpark("1", "AB12BC1234");
-        parkingLot.park(car);
-
-        boolean actual = parkingLot.isCarParked(car);
+        parkingLot.unpark(unparkedLot, "AB12BC1234");
+        String actual = parkingLot.park(car);
 
         // Assert
-        assertTrue(actual);
+        assertEquals(unparkedLot, actual);
     }
 }
