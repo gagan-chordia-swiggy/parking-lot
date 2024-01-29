@@ -3,6 +3,7 @@ import org.example.Color;
 import org.example.ParkingLot;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,5 +48,18 @@ public class ParkingLotTest {
 
         // Assert
         assertTrue(actual);
+    }
+
+    @Test
+    void testACarIsNotPresentInTheParkingSlot() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(1);
+        Car car = new Car("AP00AD1234", Color.BLUE);
+
+        // Act
+        boolean actual = parkingLot.isCarParked(car);
+
+        // Assert
+        assertFalse(actual);
     }
 }
