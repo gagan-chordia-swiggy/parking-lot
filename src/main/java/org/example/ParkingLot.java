@@ -50,4 +50,13 @@ public class ParkingLot {
 
         return count;
     }
+
+    public void unparkCar(Car car) {
+        for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().equals(car)) {
+                parkingSlots.put(entry.getKey(), null);
+                return;
+            }
+        }
+    }
 }

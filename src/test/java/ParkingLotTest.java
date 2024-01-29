@@ -128,4 +128,18 @@ public class ParkingLotTest {
         // Assert
         assertThrows(RuntimeException.class, () -> parkingLot.parkCar(car2));
     }
+
+    @Test
+    void testUnparkingACar() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(2);
+        Car car = new Car("AB12BC1234", Color.RED);
+
+        // Act
+        parkingLot.parkCar(car);
+        parkingLot.unparkCar(car);
+
+        // Assert
+        assertFalse(parkingLot.isCarParked(car));
+    }
 }
