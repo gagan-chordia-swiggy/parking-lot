@@ -3,6 +3,7 @@ import org.example.Color;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CarTest {
     @Test
@@ -12,5 +13,11 @@ public class CarTest {
 
         // Assert
         assertNotNull(car);
+    }
+
+    @Test
+    void testInvalidRegistrationCarThrowsException() {
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> new Car("12CD", Color.RED));
     }
 }
