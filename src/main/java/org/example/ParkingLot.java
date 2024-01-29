@@ -8,7 +8,7 @@ public class ParkingLot {
     private final int capacity;
 
     public ParkingLot(int capacity) {
-        if(capacity == 0) {
+        if(capacity < 1) {
             throw new IllegalArgumentException();
         }
         this.capacity = capacity;

@@ -19,4 +19,16 @@ public class ParkingLotTest {
         // Assert
         assertThrows(IllegalArgumentException.class, () -> new ParkingLot(0));
     }
+
+    @Test
+    void testParkingLotWithNegative5Slots() {
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> new ParkingLot(-5));
+    }
+
+    @Test
+    void testParkingLotWithNegative1Slots() {
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> new ParkingLot(-1));
+    }
 }
