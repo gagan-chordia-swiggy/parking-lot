@@ -2,6 +2,7 @@ import org.example.MultiLevelParkingLot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MultiLevelParkingLotTest {
     @Test
@@ -11,5 +12,10 @@ public class MultiLevelParkingLotTest {
 
         // Assert
         assertNotNull(multiLevelParkingLot);
+    }
+
+    @Test
+    void testMultiLevelParkingLotWithCapacityZeroThrowsError() {
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, 0));
     }
 }
