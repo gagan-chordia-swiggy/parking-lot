@@ -101,4 +101,17 @@ public class ParkingLotTest {
         // Assert
         assertEquals(0, actual);
     }
+
+    @Test
+    void testParkingTheSameCarTwiceWithoutUnparking() {
+        // Arrange
+        ParkingLot parkingLot = new ParkingLot(3);
+        Car car = new Car("AB12CD1234", Color.BLUE);
+
+        // Act
+        parkingLot.parkCar(car);
+
+        // Assert
+        assertThrows(IllegalArgumentException.class, () -> parkingLot.parkCar(car));
+    }
 }

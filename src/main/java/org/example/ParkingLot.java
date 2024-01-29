@@ -18,6 +18,9 @@ public class ParkingLot {
     }
 
     public void parkCar(Car car) {
+        if (isCarParked(car)) {
+            throw new IllegalArgumentException("Same car cannot be parked again");
+        }
         parkingSlots.put(nextSlotAvailable, car);
         ++nextSlotAvailable;
     }
