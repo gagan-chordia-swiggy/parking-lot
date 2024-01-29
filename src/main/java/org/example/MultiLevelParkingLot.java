@@ -54,6 +54,11 @@ public class MultiLevelParkingLot implements IParkingLot {
 
     @Override
     public int countCarsByColor(Color color) {
-        return 0;
+        int count = 0;
+        for (int ii = 0; ii < levels; ii++) {
+            count += this.parkingLots[ii].countCarsByColor(color);
+        }
+
+        return count;
     }
 }
