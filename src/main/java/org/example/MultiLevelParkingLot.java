@@ -42,12 +42,16 @@ public class MultiLevelParkingLot implements IParkingLot {
 
     @Override
     public Car unpark(String slotNumber, String registrationNumber) {
-        return null;
+        String[] slot = slotNumber.split(" - ");
+        int level = Integer.parseInt(slot[0]);
+        String parkingSlot = slot[1];
+
+        return this.parkingLots[level].unpark(parkingSlot, registrationNumber);
     }
 
     @Override
     public boolean isCarParked(Car car) {
-        for (int ii = 0; ii < levels; ii++) {
+        for (int ii = 0; ii < this.levels; ii++) {
             if (this.parkingLots[ii].isCarParked(car)) {
                 return true;
             }
@@ -59,7 +63,7 @@ public class MultiLevelParkingLot implements IParkingLot {
     @Override
     public int countCarsByColor(Color color) {
         int count = 0;
-        for (int ii = 0; ii < levels; ii++) {
+        for (int ii = 0; ii < this.levels; ii++) {
             count += this.parkingLots[ii].countCarsByColor(color);
         }
 
