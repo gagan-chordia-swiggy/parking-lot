@@ -5,7 +5,7 @@ public class MultiLevelParkingLot {
     private final int levels;
 
     public MultiLevelParkingLot(int levels, int capacityOfParkingLots) {
-        if (levels == 0 || levels == -1) {
+        if (levels < 1) {
             throw new IllegalArgumentException();
         }
 
