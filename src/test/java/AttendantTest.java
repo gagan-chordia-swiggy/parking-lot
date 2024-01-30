@@ -1,7 +1,6 @@
-import org.example.Assignment;
-import org.example.Attendant;
-import org.example.ParkingLot;
+import org.example.*;
 import org.example.exceptions.InvalidAttendantException;
+import org.example.exceptions.ParkingLotFullException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,5 +43,44 @@ public class AttendantTest {
 
         // Assert
         assertThrows(InvalidAttendantException.class, () -> attendant.add(assignment));
+    }
+
+    @Test
+    void testAttendantParksAt2ndParkingLot() {
+        // Arrange
+        Attendant attendant = new Attendant("abc");
+        Assignment assignment1 = new Assignment(new ParkingLot(1), attendant);
+        Assignment assignment2 = new Assignment(new ParkingLot(1), attendant);
+        Car car1 = new Car("AB12WE2345", Color.WHITE);
+        Car car2 = new Car("AB12FE2345", Color.WHITE);
+
+        // Act
+        attendant.add(assignment1);
+        attendant.add(assignment2);
+        attendant.park(car1, 0);
+        Ticket actual = attendant.park(car2, 1);
+
+        // Assert
+        assertEquals(new Ticket(1, 1), actual);
+    }
+
+    @Test
+    void testAttendantParksAtFullParkingLotThrowsException() {
+        // Arrange
+        Attendant attendant = new Attendant("abc");
+        Assignment assignment1 = new Assignment(new ParkingLot(1), attendant);
+        Assignment assignment2 = new Assignment(new ParkingLot(1), attendant);
+        Car car1 = new Car("AB12WE2345", Color.WHITE);
+        Car car2 = new Car("AB12FE2345", Color.WHITE);
+        Car car3 = new Car("AA12DD3214", Color.GREEN);
+
+        // Act
+        attendant.add(assignment1);
+        attendant.add(assignment2);
+        attendant.park(car1, 0);
+        attendant.park(car2, 1);
+
+        // Assert
+        assertThrows(ParkingLotFullException.class, () -> attendant.park(car3, 1));
     }
 }
