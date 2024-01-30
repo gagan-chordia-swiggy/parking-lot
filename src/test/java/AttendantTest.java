@@ -65,6 +65,27 @@ public class AttendantTest {
     }
 
     @Test
+    void test2AttendantsCanParkAtSameParkingLot() {
+        // Arrange
+        Attendant attendant1 = new Attendant("abc");
+        Attendant attendant2 = new Attendant("def");
+        ParkingLot parkingLot = new ParkingLot(3);
+        Assignment assignment1 = new Assignment(parkingLot, attendant1);
+        Assignment assignment2 = new Assignment(parkingLot, attendant2);
+        Car car1 = new Car("AB12WE2345", Color.WHITE);
+        Car car2 = new Car("AB12FE2345", Color.WHITE);
+
+        // Act
+        attendant1.add(assignment1);
+        attendant2.add(assignment2);
+        attendant1.park(car1, 0);
+        attendant2.park(car2, 0);
+
+        // Assert
+        assertEquals(2, parkingLot.countCarsByColor(Color.WHITE));
+    }
+
+    @Test
     void testAttendantParksAtFullParkingLotThrowsException() {
         // Arrange
         Attendant attendant = new Attendant("abc");
