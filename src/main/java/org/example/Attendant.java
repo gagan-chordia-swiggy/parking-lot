@@ -61,6 +61,11 @@ public class Attendant implements Parking {
 
     @Override
     public int countCarsByColor(Color color) {
-        return 0;
+        int count = 0;
+        for (Assignment assignment : this.assignments) {
+            count += assignment.parkingLot().countCarsByColor(color);
+        }
+
+        return count;
     }
 }

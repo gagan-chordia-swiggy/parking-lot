@@ -83,4 +83,26 @@ public class AttendantTest {
         // Assert
         assertThrows(ParkingLotFullException.class, () -> attendant.park(car3, 1));
     }
+
+    @Test
+    void testAttendantCountsCarByColor() {
+        // Arrange
+        Attendant attendant = new Attendant("abc");
+        Assignment assignment1 = new Assignment(new ParkingLot(2), attendant);
+        Assignment assignment2 = new Assignment(new ParkingLot(2), attendant);
+        Car car1 = new Car("AB12WE2345", Color.WHITE);
+        Car car2 = new Car("AB12FE2345", Color.WHITE);
+        Car car3 = new Car("AA12DD3214", Color.GREEN);
+
+        // Act
+        attendant.add(assignment1);
+        attendant.add(assignment2);
+        attendant.park(car1, 0);
+        attendant.park(car2, 0);
+        attendant.park(car3, 0);
+        int actual = attendant.countCarsByColor(Color.WHITE);
+
+        // Assert
+        assertEquals(2, actual);
+    }
 }
