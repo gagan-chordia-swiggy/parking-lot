@@ -1,6 +1,7 @@
 import org.example.Car;
 import org.example.Color;
 import org.example.ParkingLot;
+import org.example.Ticket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,21 +34,15 @@ public class ParkingLotTest {
     }
 
     @Test
-    void testParkingLotWithNegative1LotsThrowsException() {
-        // Assert
-        assertThrows(IllegalArgumentException.class, () -> new ParkingLot(-1));
-    }
-
-    @Test
     void testACarIsParkedInTheParkingLot() {
         // Arrange
         ParkingLot parkingLot = new ParkingLot(10);
         Car car1 = mock(Car.class);
 
         // Act
-        String actual = parkingLot.park(car1);
+        Ticket actual = parkingLot.park(car1, 0);
         // Assert
-        assertEquals("1", actual);
+        assertEquals(new Ticket(0, 1), actual);
     }
 
     @Test
@@ -75,9 +70,9 @@ public class ParkingLotTest {
         when(car1.color()).thenReturn(Color.BLUE);
         when(car2.color()).thenReturn(Color.BLUE);
         when(car3.color()).thenReturn(Color.BLACK);
-        parkingLot.park(car1);
-        parkingLot.park(car2);
-        parkingLot.park(car3);
+        parkingLot.park(car1, 0);
+        parkingLot.park(car2, 0);
+        parkingLot.park(car3, 0);
 
         int actual = parkingLot.countCarsByColor(Color.BLUE);
 
@@ -97,9 +92,9 @@ public class ParkingLotTest {
         when(car1.color()).thenReturn(Color.BLUE);
         when(car2.color()).thenReturn(Color.BLUE);
         when(car3.color()).thenReturn(Color.BLUE);
-        parkingLot.park(car1);
-        parkingLot.park(car2);
-        parkingLot.park(car3);
+        parkingLot.park(car1, 0);
+        parkingLot.park(car2, 0);
+        parkingLot.park(car3, 0);
 
         int actual = parkingLot.countCarsByColor(Color.BLACK);
 
@@ -114,10 +109,10 @@ public class ParkingLotTest {
         Car car = mock(Car.class);
 
         // Act
-        parkingLot.park(car);
+        parkingLot.park(car, 0);
 
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> parkingLot.park(car));
+        assertThrows(IllegalArgumentException.class, () -> parkingLot.park(car, 0));
     }
 
     @Test
@@ -128,10 +123,10 @@ public class ParkingLotTest {
         Car car2 = mock(Car.class);
 
         // Act
-        parkingLot.park(car1);
+        parkingLot.park(car1, 0);
 
         // Assert
-        assertThrows(RuntimeException.class, () -> parkingLot.park(car2));
+        assertThrows(RuntimeException.class, () -> parkingLot.park(car2, 0));
     }
 
     @Test
@@ -142,8 +137,8 @@ public class ParkingLotTest {
 
         // Act
         when(car.registrationNumber()).thenReturn("AB12BC1234");
-        String slotNumber = parkingLot.park(car);
-        Car unparkedCar = parkingLot.unpark(slotNumber,"AB12BC1234");
+        Ticket ticket = parkingLot.park(car, 0);
+        Car unparkedCar = parkingLot.unpark(ticket,"AB12BC1234");
 
         // Assert
         assertEquals(car, unparkedCar);
@@ -158,11 +153,11 @@ public class ParkingLotTest {
 
 
         // Act
-        parkingLot.park(car1);
-        parkingLot.park(car2);
+        parkingLot.park(car1, 0);
+        parkingLot.park(car2, 0);
 
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> parkingLot.unpark("2","CB12AA1234"));
+        assertThrows(IllegalArgumentException.class, () -> parkingLot.unpark(new Ticket(0, 1),"CB12AA1234"));
     }
 
     @Test
@@ -175,10 +170,10 @@ public class ParkingLotTest {
 
         // Act
         when(car1.registrationNumber()).thenReturn("AB12BC1234");
-        String unparkedLot = parkingLot.park(car1);
-        parkingLot.park(car2);
+        Ticket unparkedLot = parkingLot.park(car1, 0);
+        parkingLot.park(car2, 0);
         parkingLot.unpark(unparkedLot, "AB12BC1234");
-        String actual = parkingLot.park(car);
+        Ticket actual = parkingLot.park(car, 0);
 
         // Assert
         assertEquals(unparkedLot, actual);

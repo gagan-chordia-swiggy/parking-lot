@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParkingLot implements IParkingLot {
-    private final Map<Integer, Car> parkingSlots;
+    private final Map<Ticket, Car> parkingSlots;
     private final int capacity;
     private int nextSlotAvailable;
 
@@ -19,22 +19,24 @@ public class ParkingLot implements IParkingLot {
         this.nextSlotAvailable = 1;
     }
 
-    public String park(Car car) {
+    public Ticket park(Car car, int level) {
         checkForSameCarParked(car);
 
-        Integer slot = getEmptySlot().getOrDefault(true, null);
+        Ticket ticket = getEmptySlot();
 
-        if (slot != null) {
-            parkingSlots.put(slot, car);
-            return slot.toString();
+        if (ticket != null) {
+            parkingSlots.put(ticket, car);
+            return ticket;
         }
 
         if (isAtFullCapacity()) {
             throw new RuntimeException();
         }
 
-        parkingSlots.put(this.nextSlotAvailable, car);
-        return Integer.toString(this.nextSlotAvailable++);
+        Ticket parkingTicket = new Ticket(level, this.nextSlotAvailable++);
+
+        parkingSlots.put(parkingTicket, car);
+        return parkingTicket;
     }
 
     public boolean isCarParked(Car carToBeChecked) {
@@ -58,11 +60,10 @@ public class ParkingLot implements IParkingLot {
         return count;
     }
 
-    public Car unpark(String slotNumber, String registrationNumber) {
-        int slot = Integer.parseInt(slotNumber);
-        Car car = parkingSlots.get(slot);
+    public Car unpark(Ticket ticket, String registrationNumber) {
+        Car car = parkingSlots.get(ticket);
         if (car != null && car.registrationNumber().equals(registrationNumber)) {
-            parkingSlots.put(slot, null);
+            parkingSlots.put(ticket, null);
             return car;
         }
 
@@ -73,14 +74,14 @@ public class ParkingLot implements IParkingLot {
         return this.nextSlotAvailable > this.capacity;
     }
 
-    public Map<Boolean, Integer> getEmptySlot() {
-        for (Map.Entry<Integer, Car> entry : parkingSlots.entrySet()) {
+    public Ticket getEmptySlot() {
+        for (Map.Entry<Ticket, Car> entry : parkingSlots.entrySet()) {
             if (entry.getValue() == null) {
-                return Map.of(true, entry.getKey());
+                return entry.getKey();
             }
         }
 
-        return Map.of(false, -1);
+        return null;
     }
 
     private void checkForSameCarParked(Car car) {
