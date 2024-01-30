@@ -51,6 +51,13 @@ public class Attendant implements Parking {
 
     @Override
     public Car unpark(Ticket ticket, String registrationNumber) {
+        for (Assignment assignment : this.assignments) {
+            Car car = assignment.parkingLot().unpark(ticket, registrationNumber);
+            if (car != null) {
+                return car;
+            }
+        }
+
         return null;
     }
 
