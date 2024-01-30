@@ -1,5 +1,7 @@
 import org.example.Car;
 import org.example.Color;
+import org.example.exceptions.InvalidRegistrationNumberException;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,6 +20,6 @@ public class CarTest {
     @Test
     void testInvalidRegistrationCarThrowsException() {
         // Assert
-        assertThrows(IllegalArgumentException.class, () -> new Car("12CD", Color.RED));
+        assertThrows(InvalidRegistrationNumberException.class, () -> new Car("12CD", Color.RED));
     }
 }
