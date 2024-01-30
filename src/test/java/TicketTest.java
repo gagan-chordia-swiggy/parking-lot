@@ -1,5 +1,7 @@
-import org.example.InvalidTicketException;
+import org.example.exceptions.InvalidRegistrationNumberException;
+import org.example.exceptions.InvalidTicketException;
 import org.example.Ticket;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,5 +27,11 @@ public class TicketTest {
     void testNegativeSlotTicketThrowsException() {
         // Assert
         assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3, "AB12BC1234"));
+    }
+
+    @Test
+    void testInvalidRegistrationNumberTicketThrowsException() {
+        // Assert
+        assertThrows(InvalidRegistrationNumberException.class, () -> new Ticket(1, 1, "BD1233A12"));
     }
 }
