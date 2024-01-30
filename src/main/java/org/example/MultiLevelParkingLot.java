@@ -1,8 +1,6 @@
 package org.example;
 
-import org.example.interfaces.Parking;
-
-public class MultiLevelParkingLot implements Parking {
+public class MultiLevelParkingLot {
     private final ParkingLot[] parkingLots;
     private final int levels;
 
@@ -19,8 +17,7 @@ public class MultiLevelParkingLot implements Parking {
         }
     }
 
-    @Override
-    public Ticket park(Car car, int level) {
+    public Ticket park(Car car) {
         Ticket ticket = null;
 
         for (int ii = 0; ii < this.levels; ii++) {
@@ -37,12 +34,10 @@ public class MultiLevelParkingLot implements Parking {
         return ticket;
     }
 
-    @Override
     public Car unpark(Ticket ticket, String registrationNumber) {
         return this.parkingLots[ticket.level()].unpark(ticket, registrationNumber);
     }
 
-    @Override
     public boolean isCarParked(Car car) {
         for (int ii = 0; ii < this.levels; ii++) {
             if (this.parkingLots[ii].isCarParked(car)) {
@@ -53,7 +48,6 @@ public class MultiLevelParkingLot implements Parking {
         return false;
     }
 
-    @Override
     public int countCarsByColor(Color color) {
         int count = 0;
         for (int ii = 0; ii < this.levels; ii++) {

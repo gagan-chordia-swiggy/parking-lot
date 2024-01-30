@@ -1,11 +1,9 @@
 package org.example;
 
-import org.example.interfaces.Parking;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class ParkingLot implements Parking {
+public class ParkingLot {
     private final Map<Ticket, Car> parkingSlots;
     private final int capacity;
     private int nextSlotAvailable;

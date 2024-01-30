@@ -2,15 +2,14 @@ package org.example;
 
 import org.example.exceptions.InvalidAttendantException;
 import org.example.exceptions.ParkingLotFullException;
-import org.example.interfaces.Parking;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Attendant implements Parking {
+public class Attendant {
     private final String name;
-    private final List<Assignment> assignments;
+    private final List<ParkingLot> parkingLots;
 
     public Attendant(String name) {
         if (name == null) {
@@ -18,29 +17,20 @@ public class Attendant implements Parking {
         }
 
         this.name = name;
-        this.assignments = new LinkedList<>();
+        this.parkingLots = new LinkedList<>();
     }
 
-    public void add(Assignment assignment) {
-        if (assignment.attendant() != this) {
-            throw new InvalidAttendantException();
-        }
-
-        this.assignments.add(assignment);
+    public void add(ParkingLot parkingLot) {
+        this.parkingLots.add(parkingLot);
     }
 
-    public String name() {
-        return new String(this.name);
+    public List<ParkingLot> parkingLots() {
+        return new ArrayList<>(this.parkingLots);
     }
 
-    public List<Assignment> assignments() {
-        return new ArrayList<>(this.assignments);
-    }
-
-    @Override
-    public Ticket park(Car car, int level) {
-        for (int ii = 0; ii < this.assignments.size(); ii++) {
-            ParkingLot parkingLot = this.assignments.get(ii).parkingLot();
+    public Ticket park(Car car) {
+        for (int ii = 0; ii < this.parkingLots.size(); ii++) {
+            ParkingLot parkingLot = this.parkingLots.get(ii);
             if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlot() != null) {
                 return parkingLot.park(car, ii);
             }
@@ -49,10 +39,9 @@ public class Attendant implements Parking {
         throw new ParkingLotFullException();
     }
 
-    @Override
     public Car unpark(Ticket ticket, String registrationNumber) {
-        for (Assignment assignment : this.assignments) {
-            Car car = assignment.parkingLot().unpark(ticket, registrationNumber);
+        for (ParkingLot parkingLot : this.parkingLots) {
+            Car car = parkingLot.unpark(ticket, registrationNumber);
             if (car != null) {
                 return car;
             }
@@ -61,10 +50,9 @@ public class Attendant implements Parking {
         return null;
     }
 
-    @Override
     public boolean isCarParked(Car car) {
-        for (Assignment assignment : this.assignments) {
-            if (assignment.parkingLot().isCarParked(car)) {
+        for (ParkingLot parkingLot : this.parkingLots) {
+            if (parkingLot.isCarParked(car)) {
                 return true;
             }
         }
@@ -72,11 +60,10 @@ public class Attendant implements Parking {
         return false;
     }
 
-    @Override
     public int countCarsByColor(Color color) {
         int count = 0;
-        for (Assignment assignment : this.assignments) {
-            count += assignment.parkingLot().countCarsByColor(color);
+        for (ParkingLot parkingLot : this.parkingLots) {
+            count += parkingLot.countCarsByColor(color);
         }
 
         return count;
