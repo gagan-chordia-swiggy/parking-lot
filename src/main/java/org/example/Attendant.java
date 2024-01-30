@@ -56,6 +56,12 @@ public class Attendant implements Parking {
 
     @Override
     public boolean isCarParked(Car car) {
+        for (Assignment assignment : this.assignments) {
+            if (assignment.parkingLot().isCarParked(car)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
