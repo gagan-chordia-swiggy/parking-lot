@@ -50,7 +50,7 @@ public class MultiLevelParkingLotTest {
         Ticket actual = multiLevelParkingLot.park(car);
 
         // Assert
-        assertEquals(new Ticket(0, 1), actual);
+        assertEquals(new Ticket(0, 0), actual);
     }
 
     @Test

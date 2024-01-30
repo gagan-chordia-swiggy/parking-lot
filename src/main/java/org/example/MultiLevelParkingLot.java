@@ -23,12 +23,12 @@ public class MultiLevelParkingLot {
         Ticket ticket = null;
 
         for (int ii = 0; ii < this.levels; ii++) {
-            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && this.parkingLots[ii].getEmptySlot() == null) {
+            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && this.parkingLots[ii].getEmptySlotFromFront() == null) {
                 throw new ParkingLotFullException();
             }
 
-            if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlot() != null) {
-                ticket = this.parkingLots[ii].park(car, ii);
+            if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlotFromFront() != null) {
+                ticket = this.parkingLots[ii].park(car, ii, true);
                 break;
             }
         }

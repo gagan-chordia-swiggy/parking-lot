@@ -9,14 +9,16 @@ import java.util.List;
 
 public class Attendant {
     private final String name;
+    private final boolean parkNearFirst;
     private final List<ParkingLot> parkingLots;
 
-    public Attendant(String name) {
+    public Attendant(String name, boolean parkNearFirst) {
         if (name == null) {
             throw new InvalidAttendantException();
         }
 
         this.name = name;
+        this.parkNearFirst = parkNearFirst;
         this.parkingLots = new LinkedList<>();
     }
 
@@ -29,14 +31,11 @@ public class Attendant {
     }
 
     public Ticket park(Car car) {
-        for (int ii = 0; ii < this.parkingLots.size(); ii++) {
-            ParkingLot parkingLot = this.parkingLots.get(ii);
-            if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlot() != null) {
-                return parkingLot.park(car, ii);
-            }
+        if (this.parkNearFirst) {
+            return parkFromFirst(car);
         }
 
-        throw new ParkingLotFullException();
+        return parkFromLast(car);
     }
 
     public Car unpark(Ticket ticket, String registrationNumber) {
@@ -67,5 +66,27 @@ public class Attendant {
         }
 
         return count;
+    }
+
+    private Ticket parkFromFirst(Car car) {
+        for (int ii = 0; ii < this.parkingLots.size(); ii++) {
+            ParkingLot parkingLot = this.parkingLots.get(ii);
+            if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlotFromFront() != null) {
+                return parkingLot.park(car, ii, this.parkNearFirst);
+            }
+        }
+
+        throw new ParkingLotFullException();
+    }
+
+    private Ticket parkFromLast(Car car) {
+        for (int ii = this.parkingLots.size() - 1; ii >= 0 ; ii--) {
+            ParkingLot parkingLot = this.parkingLots.get(ii);
+            if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlotFromFront() != null) {
+                return parkingLot.park(car, ii, this.parkNearFirst);
+            }
+        }
+
+        throw new ParkingLotFullException();
     }
 }

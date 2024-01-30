@@ -10,7 +10,7 @@ public class AttendantTest {
     @Test
     void testAttendantIsCreated() {
         // Arrange, Act
-        Attendant attendant = new Attendant("gagan");
+        Attendant attendant = new Attendant("gagan", true);
 
         // Assert
         assertNotNull(attendant);
@@ -19,13 +19,13 @@ public class AttendantTest {
     @Test
     void testAttendantWithoutNameThrowsException() {
         // Assert
-        assertThrows(InvalidAttendantException.class, () -> new Attendant(null));
+        assertThrows(InvalidAttendantException.class, () -> new Attendant(null, false));
     }
 
     @Test
     void testAttendantIsAssignedAParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("Abc");
+        Attendant attendant = new Attendant("Abc", true);
         ParkingLot parkingLot = mock(ParkingLot.class);
 
         // Act
@@ -36,9 +36,39 @@ public class AttendantTest {
     }
 
     @Test
+    void testAttendantParksCarNearInParkingLot() {
+        // Arrange
+        Attendant attendant = new Attendant("Abc", true);
+        ParkingLot parkingLot = new ParkingLot(7);
+        Car car = new Car("AA12BC3456", Color.BLUE);
+
+        // Act
+        attendant.add(parkingLot);
+        Ticket actual = attendant.park(car);
+
+        // Assert
+        assertEquals(new Ticket(0, 0), actual);
+    }
+
+    @Test
+    void testAttendantParksCarFarInParkingLot() {
+        // Arrange
+        Attendant attendant = new Attendant("Abc", false);
+        ParkingLot parkingLot = new ParkingLot(7);
+        Car car = new Car("AA12BC3456", Color.BLUE);
+
+        // Act
+        attendant.add(parkingLot);
+        Ticket actual = attendant.park(car);
+
+        // Assert
+        assertEquals(new Ticket(0, 7), actual);
+    }
+
+    @Test
     void testAttendantParksAt2ndParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(1);
         ParkingLot parkingLot2 = new ParkingLot(1);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -51,14 +81,14 @@ public class AttendantTest {
         Ticket actual = attendant.park(car2);
 
         // Assert
-        assertEquals(new Ticket(1, 1), actual);
+        assertEquals(new Ticket(1, 0), actual);
     }
 
     @Test
     void test2AttendantsCanParkAtSameParkingLot() {
         // Arrange
-        Attendant attendant1 = new Attendant("abc");
-        Attendant attendant2 = new Attendant("def");
+        Attendant attendant1 = new Attendant("abc", true);
+        Attendant attendant2 = new Attendant("def", true);
         ParkingLot parkingLot = new ParkingLot(3);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
         Car car2 = new Car("AB12FE2345", Color.WHITE);
@@ -76,7 +106,7 @@ public class AttendantTest {
     @Test
     void testAttendantParksAtFullParkingLotThrowsException() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(1);
         ParkingLot parkingLot2 = new ParkingLot(1);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -96,7 +126,7 @@ public class AttendantTest {
     @Test
     void testAttendantCountsCarByColor() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -118,7 +148,7 @@ public class AttendantTest {
     @Test
     void testAttendantCheckIfCarIsParked() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -140,7 +170,7 @@ public class AttendantTest {
     @Test
     void testAttendantCheckIfCarIsNotParked() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -161,7 +191,7 @@ public class AttendantTest {
     @Test
     void testAttendantUnparkingACar() {
         // Arrange
-        Attendant attendant = new Attendant("abc");
+        Attendant attendant = new Attendant("abc", true);
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
