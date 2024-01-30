@@ -1,4 +1,3 @@
-import org.example.exceptions.InvalidRegistrationNumberException;
 import org.example.exceptions.InvalidTicketException;
 import org.example.Ticket;
 
@@ -11,7 +10,7 @@ public class TicketTest {
     @Test
     void testTicketIsCreated() {
         // Arrange, Act
-        Ticket ticket = new Ticket(5, 3, "AB12BC1234");
+        Ticket ticket = new Ticket(5, 3);
 
         // Assert
         assertNotNull(ticket);
@@ -20,18 +19,12 @@ public class TicketTest {
     @Test
     void testNegativeLevelTicketThrowsException() {
         // Assert
-        assertThrows(InvalidTicketException.class, () -> new Ticket(-1, 3, "AB12BC1234"));
+        assertThrows(InvalidTicketException.class, () -> new Ticket(-1, 3));
     }
 
     @Test
     void testNegativeSlotTicketThrowsException() {
         // Assert
-        assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3, "AB12BC1234"));
-    }
-
-    @Test
-    void testInvalidRegistrationNumberTicketThrowsException() {
-        // Assert
-        assertThrows(InvalidRegistrationNumberException.class, () -> new Ticket(1, 1, "BD1233A12"));
+        assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3));
     }
 }
