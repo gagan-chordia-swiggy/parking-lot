@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.exceptions.CarNotFoundException;
+import org.example.exceptions.ParkingLotFullException;
+import org.example.exceptions.SameCarParkedException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +32,7 @@ public class ParkingLot {
         }
 
         if (isAtFullCapacity()) {
-            throw new RuntimeException();
+            throw new ParkingLotFullException();
         }
 
         Ticket parkingTicket = new Ticket(level, this.nextSlotAvailable++);
@@ -65,7 +69,7 @@ public class ParkingLot {
             return car;
         }
 
-        throw new IllegalArgumentException("Car not found. Thus, cannot be unparked");
+        throw new CarNotFoundException();
     }
 
     public boolean isAtFullCapacity() {
@@ -84,7 +88,7 @@ public class ParkingLot {
 
     private void checkForSameCarParked(Car car) {
         if (isCarParked(car)) {
-            throw new IllegalArgumentException("Same car cannot be parked again");
+            throw new SameCarParkedException();
         }
     }
 }

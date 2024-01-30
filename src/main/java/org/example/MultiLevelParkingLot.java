@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.exceptions.ParkingLotFullException;
+
 public class MultiLevelParkingLot {
     private final ParkingLot[] parkingLots;
     private final int levels;
@@ -22,7 +24,7 @@ public class MultiLevelParkingLot {
 
         for (int ii = 0; ii < this.levels; ii++) {
             if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && this.parkingLots[ii].getEmptySlot() == null) {
-                throw new RuntimeException();
+                throw new ParkingLotFullException();
             }
 
             if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlot() != null) {
