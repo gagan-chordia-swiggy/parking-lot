@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.exceptions.InvalidAttendantException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,5 +21,13 @@ public class Attendant {
 
     public void add(Assignment assignment) {
         assignments.add(assignment);
+    }
+
+    public String name() {
+        return new String(name);
+    }
+
+    public List<Assignment> assignments() {
+        return new ArrayList<>(assignments);
     }
 }
