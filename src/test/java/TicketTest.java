@@ -20,4 +20,10 @@ public class TicketTest {
         // Assert
         assertThrows(InvalidTicketException.class, () -> new Ticket(-1, 3, "AB12BC1234"));
     }
+
+    @Test
+    void testNegativeSlotTicketThrowsException() {
+        // Assert
+        assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3, "AB12BC1234"));
+    }
 }
