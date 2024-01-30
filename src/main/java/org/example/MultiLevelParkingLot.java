@@ -20,33 +20,26 @@ public class MultiLevelParkingLot implements IParkingLot {
     }
 
     @Override
-    public String park(Car car) {
-        StringBuilder slot = new StringBuilder();
+    public Ticket park(Car car, int level) {
+        Ticket ticket = null;
 
         for (int ii = 0; ii < this.levels; ii++) {
-            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && !this.parkingLots[ii].getEmptySlot().containsKey(true)) {
+            if (ii == this.levels - 1 && this.parkingLots[ii].isAtFullCapacity() && this.parkingLots[ii].getEmptySlot() == null) {
                 throw new RuntimeException();
             }
 
-            if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlot().containsKey(true)) {
-                slot.append(ii);
-                slot.append(" - ");
-                String levelSlot = this.parkingLots[ii].park(car);
-                slot.append(levelSlot);
+            if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlot() != null) {
+                ticket = this.parkingLots[ii].park(car, ii);
                 break;
             }
         }
 
-        return slot.toString();
+        return ticket;
     }
 
     @Override
-    public Car unpark(String slotNumber, String registrationNumber) {
-        String[] slot = slotNumber.split(" - ");
-        int level = Integer.parseInt(slot[0]);
-        String parkingSlot = slot[1];
-
-        return this.parkingLots[level].unpark(parkingSlot, registrationNumber);
+    public Car unpark(Ticket ticket, String registrationNumber) {
+        return this.parkingLots[ticket.level()].unpark(ticket, registrationNumber);
     }
 
     @Override

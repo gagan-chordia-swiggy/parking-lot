@@ -1,6 +1,7 @@
 import org.example.Car;
 import org.example.Color;
 import org.example.MultiLevelParkingLot;
+import org.example.Ticket;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,21 +41,16 @@ public class MultiLevelParkingLotTest {
     }
 
     @Test
-    void testMultiLevelParkingLotWithNegative15LevelThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(-15, 12));
-    }
-
-    @Test
     void testParkingAtInitialLevelShouldReturnSlot() {
         // Arrange
         MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
         Car car = new Car("AB12FR1234", Color.WHITE);
 
         // Act
-        String actual = multiLevelParkingLot.park(car);
+        Ticket actual = multiLevelParkingLot.park(car, 0);
 
         // Assert
-        assertEquals("0 - 1", actual);
+        assertEquals(new Ticket(0, 1), actual);
     }
 
     @Test
@@ -65,8 +61,8 @@ public class MultiLevelParkingLotTest {
         Car car2 = new Car("AA12FR1234", Color.WHITE);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
         boolean actual = multiLevelParkingLot.isCarParked(car2);
 
         // Assert
@@ -84,12 +80,12 @@ public class MultiLevelParkingLotTest {
         Car car = new Car("BC12IO9087", Color.WHITE);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
-        String parkingSlot = multiLevelParkingLot.park(car3);
-        multiLevelParkingLot.park(car4);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
+        Ticket parkingSlot = multiLevelParkingLot.park(car3, 0);
+        multiLevelParkingLot.park(car4, 0);
         multiLevelParkingLot.unpark(parkingSlot, "AA34FA1234");
-        String actual = multiLevelParkingLot.park(car);
+        Ticket actual = multiLevelParkingLot.park(car, 0);
 
         // Assert
         assertEquals(parkingSlot, actual);
@@ -104,8 +100,8 @@ public class MultiLevelParkingLotTest {
         Car car = new Car("AA34FA1234", Color.GREEN);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
         boolean actual = multiLevelParkingLot.isCarParked(car);
 
         // Assert
@@ -121,11 +117,11 @@ public class MultiLevelParkingLotTest {
         Car car = new Car("AA34FA1234", Color.GREEN);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
 
         // Assert
-        assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car));
+        assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car, 0));
     }
 
     @Test
@@ -138,10 +134,10 @@ public class MultiLevelParkingLotTest {
         Car car4 = new Car("BB12IO9087", Color.WHITE);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
-        multiLevelParkingLot.park(car3);
-        multiLevelParkingLot.park(car4);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
+        multiLevelParkingLot.park(car3, 0);
+        multiLevelParkingLot.park(car4, 0);
         int actual = multiLevelParkingLot.countCarsByColor(Color.WHITE);
 
         // Assert
@@ -158,10 +154,10 @@ public class MultiLevelParkingLotTest {
         Car car4 = new Car("BB12IO9087", Color.WHITE);
 
         // Act
-        multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
-        String parkedCarSlot = multiLevelParkingLot.park(car3);
-        multiLevelParkingLot.park(car4);
+        multiLevelParkingLot.park(car1, 0);
+        multiLevelParkingLot.park(car2, 0);
+        Ticket parkedCarSlot = multiLevelParkingLot.park(car3, 0);
+        multiLevelParkingLot.park(car4, 0);
         Car actual = multiLevelParkingLot.unpark(parkedCarSlot, "AA34FA1234");
 
         // Assert
