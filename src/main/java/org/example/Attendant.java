@@ -17,4 +17,8 @@ public class Attendant {
         this.name = name;
         this.assignments = new LinkedList<>();
     }
+
+    public void add(Assignment assignment) {
+        assignments.add(assignment);
+    }
 }
