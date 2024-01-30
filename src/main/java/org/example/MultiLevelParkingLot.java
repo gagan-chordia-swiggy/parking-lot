@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.interfaces.IParkingLot;
+import org.example.interfaces.Parking;
 
-public class MultiLevelParkingLot implements IParkingLot {
+public class MultiLevelParkingLot implements Parking {
     private final ParkingLot[] parkingLots;
     private final int levels;
 
