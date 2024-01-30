@@ -20,6 +20,10 @@ public class Attendant {
     }
 
     public void add(Assignment assignment) {
+        if (assignment.attendant() != this) {
+            throw new InvalidAttendantException();
+        }
+
         assignments.add(assignment);
     }
 

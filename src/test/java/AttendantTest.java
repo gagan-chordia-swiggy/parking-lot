@@ -35,4 +35,14 @@ public class AttendantTest {
         // Assert
         assertEquals(1, attendant.assignments().size());
     }
+
+    @Test
+    void testParkingLotCannotBeAssignedToUnknownAttendantThrowsException() {
+        // Arrange
+        Attendant attendant = new Attendant("Abc");
+        Assignment assignment = mock(Assignment.class);
+
+        // Assert
+        assertThrows(InvalidAttendantException.class, () -> attendant.add(assignment));
+    }
 }
