@@ -1,15 +1,12 @@
-import org.example.Car;
-import org.example.Color;
-import org.example.ParkingLot;
-import org.example.Ticket;
+import org.example.*;
+import org.example.interfaces.ParkingLotSubscriber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ParkingLotTest {
     @Test
@@ -189,5 +186,18 @@ public class ParkingLotTest {
 
         // Assert
         assertEquals(unparkedLot, actual);
+    }
+
+    @Test
+    void testObserverIsNotifiedWhenParkingIsFull() {
+        // Arrange
+        ParkingLotSubscriber observer = mock(Attendant.class);
+        ParkingLot parkingLot = new ParkingLot(1);
+        Car car = new Car("AB12BC1234", Color.GREEN);
+
+        NotificationBus.instance().subscribe(observer, ParkingLotEvent.FULL);
+        parkingLot.parkFromNearest(car, 0);
+
+        verify(observer).notify(ParkingLotEvent.FULL, parkingLot);
     }
 }

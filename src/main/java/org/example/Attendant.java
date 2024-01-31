@@ -2,13 +2,14 @@ package org.example;
 
 import org.example.exceptions.InvalidAttendantException;
 import org.example.exceptions.ParkingLotFullException;
+import org.example.interfaces.ParkingLotSubscriber;
 import org.example.interfaces.ParkingStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Attendant {
+public class Attendant implements ParkingLotSubscriber {
     private final String name;
     private final ParkingStrategy parkingStrategy;
     private final List<ParkingLot> parkingLots;

@@ -3,11 +3,9 @@ package org.example;
 import org.example.exceptions.CarNotFoundException;
 import org.example.exceptions.ParkingLotFullException;
 import org.example.exceptions.SameCarParkedException;
+import org.example.interfaces.ParkingLotSubscriber;
 
-import java.util.Collections;
-import java.util.Random;
-import java.util.TreeMap;
-import java.util.Map;
+import java.util.*;
 
 public class ParkingLot {
     private final Map<Ticket, Car> parkingSlots;
@@ -57,7 +55,7 @@ public class ParkingLot {
         Car car = parkingSlots.get(ticket);
         if (car != null && car.registrationNumber().equals(registrationNumber)) {
             if (!isParkingAvailable()) {
-                System.out.println("There is vacancy");
+                notifyVacant();
             }
 
             parkingSlots.put(ticket, null);
@@ -114,13 +112,15 @@ public class ParkingLot {
         }
 
         if (isAtFullCapacity()) {
-            System.out.println("Parking lot is full");
             throw new ParkingLotFullException();
         }
 
         Ticket parkingTicket = new Ticket(level, this.nextAvailableSlot++);
 
         parkingSlots.put(parkingTicket, car);
+        if (!isParkingAvailable()) {
+            notifyFull();
+        }
         return parkingTicket;
     }
 
@@ -134,13 +134,15 @@ public class ParkingLot {
         }
 
         if (isAtFullCapacity()) {
-            System.out.println("Parking lot is full");
             throw new ParkingLotFullException();
         }
 
         Ticket parkingTicket = new Ticket(level, this.availableSlotFromEnd--);
 
         parkingSlots.put(parkingTicket, car);
+        if (!isParkingAvailable()) {
+            notifyFull();
+        }
         return parkingTicket;
     }
 
@@ -150,5 +152,13 @@ public class ParkingLot {
         boolean distribution = new Random().nextBoolean();
 
         return distribution ? parkFromNearest(car, level) : parkFromFarthest(car, level);
+    }
+
+    private void notifyFull() {
+        NotificationBus.instance().publish(this, ParkingLotEvent.FULL);
+    }
+
+    private void notifyVacant() {
+        NotificationBus.instance().publish(this, ParkingLotEvent.EMPTY);
     }
 }
