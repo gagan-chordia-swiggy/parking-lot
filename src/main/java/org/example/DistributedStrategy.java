@@ -3,27 +3,22 @@ package org.example;
 import org.example.exceptions.ParkingLotFullException;
 import org.example.interfaces.ParkingStrategy;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DistributedStrategy implements ParkingStrategy {
+    private int index = 0;
+
     @Override
     public Ticket park(List<ParkingLot> parkingLots, Car car) {
-        List<ParkingLot> temporaryLots = new ArrayList<>(parkingLots);
-        Collections.shuffle(temporaryLots);
-        int iterator = 0;
-
-        while (!temporaryLots.isEmpty()) {
-            ParkingLot lot = temporaryLots.get(iterator);
-            int index = parkingLots.indexOf(lot);
+        for (int ii = 0; ii < parkingLots.size(); ii++) {
+            ParkingLot currentLot = parkingLots.get(index);
 
             try {
-                if (!lot.isAtFullCapacity() || lot.getEmptySlotFromFront() != null) {
-                    return lot.parkDistributively(car, index);
-                }
+                Ticket ticket = currentLot.parkFromNearest(car, index);
+                index = (index + 1) % parkingLots.size();
+                return ticket;
             } catch (ParkingLotFullException e) {
-                continue;
+                index = (index + 1) % parkingLots.size();
             }
         }
 

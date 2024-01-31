@@ -146,14 +146,6 @@ public class ParkingLot {
         return parkingTicket;
     }
 
-    public Ticket parkDistributively(Car car, int level) {
-        checkForSameCarParked(car);
-
-        boolean distribution = new Random().nextBoolean();
-
-        return distribution ? parkFromNearest(car, level) : parkFromFarthest(car, level);
-    }
-
     private void notifyFull() {
         NotificationBus.instance().publish(this, ParkingLotEvent.FULL);
     }

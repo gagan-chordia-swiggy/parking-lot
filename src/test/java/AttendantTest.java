@@ -65,6 +65,26 @@ public class AttendantTest {
     }
 
     @Test
+    void testAttendantParksCarDistributively() {
+        // Arrange
+        Attendant attendant = new Attendant("Abc", new DistributedStrategy());
+        ParkingLot parkingLot1 = new ParkingLot(4);
+        ParkingLot parkingLot2 = new ParkingLot(4);
+        Car car1 = new Car("FS12ER1234", Color.GREEN);
+        Car car2 = new Car("AS12ER1234", Color.GREEN);
+
+        // Act
+        attendant.add(parkingLot1);
+        attendant.add(parkingLot2);
+        Ticket parkingTicket1 = attendant.park(car1);
+        Ticket parkingTicket2 = attendant.park(car2);
+
+        // Assert
+        assertEquals(new Ticket(0, 1), parkingTicket1);
+        assertEquals(new Ticket(1, 1), parkingTicket2);
+    }
+
+    @Test
     void testAttendantParksAt2ndParkingLot() {
         // Arrange
         Attendant attendant = new Attendant("abc", new NearestParkingStrategy());
