@@ -2,6 +2,9 @@ import org.example.*;
 import org.example.interfaces.ParkingLotSubscriber;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -194,10 +197,28 @@ public class ParkingLotTest {
         ParkingLotSubscriber observer = mock(Attendant.class);
         ParkingLot parkingLot = new ParkingLot(1);
         Car car = new Car("AB12BC1234", Color.GREEN);
-
         NotificationBus.instance().subscribe(observer, ParkingLotEvent.FULL);
+
+        // Act
         parkingLot.parkFromNearest(car, 0);
 
+        // Assert
         verify(observer).notify(ParkingLotEvent.FULL, parkingLot);
+    }
+
+    @Test
+    void testObserverIsNotifiedWhenParkingGetsVacant() {
+        // Arrange
+        ParkingLotSubscriber observer = mock(Attendant.class);
+        ParkingLot parkingLot = new ParkingLot(1);
+        Car car = new Car("AB12BC1234", Color.GREEN);
+        NotificationBus.instance().subscribe(observer, ParkingLotEvent.EMPTY);
+
+        // Act
+        Ticket parkingTicket = parkingLot.parkFromNearest(car, 0);
+        parkingLot.unpark(parkingTicket, "AB12BC1234");
+
+        // Assert
+        verify(observer).notify(ParkingLotEvent.EMPTY, parkingLot);
     }
 }

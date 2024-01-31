@@ -57,4 +57,13 @@ public class Attendant implements ParkingLotSubscriber {
 
         return count;
     }
+
+    @Override
+    public void notify(ParkingLotEvent event, Object publisher) {
+        if (!parkingLots.contains((ParkingLot) publisher)) {
+            return;
+        }
+
+        ParkingLotSubscriber.super.notify(event, publisher);
+    }
 }
