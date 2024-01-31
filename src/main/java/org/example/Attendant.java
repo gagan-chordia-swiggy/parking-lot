@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Attendant implements ParkingLotSubscriber {
     private final String name;
-    private final ParkingStrategy parkingStrategy;
+    private ParkingStrategy parkingStrategy;
     private final List<ParkingLot> parkingLots;
 
     public Attendant(String name, ParkingStrategy parkingStrategy) {
@@ -20,6 +20,10 @@ public class Attendant implements ParkingLotSubscriber {
 
         this.name = name;
         this.parkingLots = new LinkedList<>();
+        this.parkingStrategy = parkingStrategy;
+    }
+
+    public void setParkingStrategy(ParkingStrategy parkingStrategy) {
         this.parkingStrategy = parkingStrategy;
     }
 

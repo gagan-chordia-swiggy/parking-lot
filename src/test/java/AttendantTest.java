@@ -208,4 +208,25 @@ public class AttendantTest {
         // Assert
         assertEquals(car2, actual);
     }
+
+    @Test
+    void testAsAttendantChangeParkingStrategy() {
+        // Arrange
+        Attendant attendant = new Attendant("abc", new FarthestParkingStrategy());
+        ParkingLot parkingLot1 = new ParkingLot(2);
+        ParkingLot parkingLot2 = new ParkingLot(2);
+        Car car1 = new Car("AB12WE2345", Color.WHITE);
+        Car car2 = new Car("AB12FE2345", Color.WHITE);
+
+        // Act
+        attendant.add(parkingLot1);
+        attendant.add(parkingLot2);
+        Ticket parkingTicket = attendant.park(car1);
+        attendant.setParkingStrategy(new NearestParkingStrategy());
+        Ticket actual = attendant.park(car2);
+
+        // Assert
+        assertEquals(new Ticket(1, 2), parkingTicket);
+        assertEquals(new Ticket(0, 1), actual);
+    }
 }
