@@ -5,13 +5,15 @@ import org.example.exceptions.ParkingLotFullException;
 import org.example.exceptions.SameCarParkedException;
 
 import java.util.Collections;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.Map;
 
 public class ParkingLot {
     private final Map<Ticket, Car> parkingSlots;
-    private int frontSlotsFilled;
-    private int backSlotsFilled;
+    private int nextAvailableSlot;
+    private int availableSlotFromEnd;
+    private final int capacity;
 
     public ParkingLot(int capacity) {
         if(capacity < 1) {
@@ -19,18 +21,15 @@ public class ParkingLot {
         }
 
         this.parkingSlots = new TreeMap<>();
-        this.frontSlotsFilled = 0;
-        this.backSlotsFilled = capacity;
+        this.nextAvailableSlot = 1;
+        this.capacity = capacity;
+        this.availableSlotFromEnd = capacity;
     }
 
     public Ticket park(Car car, int level, boolean fromNearest) {
         checkForSameCarParked(car);
 
-        if (fromNearest) {
-            return parkFromNearest(car, level);
-        }
-
-        return parkFromFarthest(car, level);
+        return fromNearest ? parkFromNearest(car, level) : parkFromFarthest(car, level);
     }
 
     public boolean isCarParked(Car carToBeChecked) {
@@ -69,7 +68,7 @@ public class ParkingLot {
     }
 
     public boolean isAtFullCapacity() {
-        return this.frontSlotsFilled - this.backSlotsFilled == 0;
+        return Math.abs(this.nextAvailableSlot - this.availableSlotFromEnd) == this.capacity;
     }
 
     public Ticket getEmptySlotFromFront() {
@@ -105,7 +104,8 @@ public class ParkingLot {
         return !isAtFullCapacity() || getEmptySlotFromFront() != null;
     }
 
-    private Ticket parkFromNearest(Car car, int level) {
+    public Ticket parkFromNearest(Car car, int level) {
+        checkForSameCarParked(car);
         Ticket ticket = getEmptySlotFromFront();
 
         if (ticket != null) {
@@ -118,13 +118,14 @@ public class ParkingLot {
             throw new ParkingLotFullException();
         }
 
-        Ticket parkingTicket = new Ticket(level, this.frontSlotsFilled++);
+        Ticket parkingTicket = new Ticket(level, this.nextAvailableSlot++);
 
         parkingSlots.put(parkingTicket, car);
         return parkingTicket;
     }
 
-    private Ticket parkFromFarthest(Car car, int level) {
+    public Ticket parkFromFarthest(Car car, int level) {
+        checkForSameCarParked(car);
         Ticket ticket = getEmptySlotFromLast();
 
         if (ticket != null) {
@@ -137,9 +138,17 @@ public class ParkingLot {
             throw new ParkingLotFullException();
         }
 
-        Ticket parkingTicket = new Ticket(level, this.backSlotsFilled--);
+        Ticket parkingTicket = new Ticket(level, this.availableSlotFromEnd--);
 
         parkingSlots.put(parkingTicket, car);
         return parkingTicket;
+    }
+
+    public Ticket parkDistributively(Car car, int level) {
+        checkForSameCarParked(car);
+
+        boolean distribution = new Random().nextBoolean();
+
+        return distribution ? parkFromNearest(car, level) : parkFromFarthest(car, level);
     }
 }

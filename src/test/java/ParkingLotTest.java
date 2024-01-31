@@ -42,7 +42,7 @@ public class ParkingLotTest {
         // Act
         Ticket actual = parkingLot.park(car1, 0, true);
         // Assert
-        assertEquals(new Ticket(0, 0), actual);
+        assertEquals(new Ticket(0, 1), actual);
     }
 
     @Test

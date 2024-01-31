@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.exceptions.InvalidAttendantException;
 import org.example.exceptions.ParkingLotFullException;
+import org.example.interfaces.ParkingStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,17 +10,17 @@ import java.util.List;
 
 public class Attendant {
     private final String name;
-    private final boolean parkNearFirst;
+    private final ParkingStrategy parkingStrategy;
     private final List<ParkingLot> parkingLots;
 
-    public Attendant(String name, boolean parkNearFirst) {
+    public Attendant(String name, ParkingStrategy parkingStrategy) {
         if (name == null) {
             throw new InvalidAttendantException();
         }
 
         this.name = name;
-        this.parkNearFirst = parkNearFirst;
         this.parkingLots = new LinkedList<>();
+        this.parkingStrategy = parkingStrategy;
     }
 
     public void add(ParkingLot parkingLot) {
@@ -31,11 +32,18 @@ public class Attendant {
     }
 
     public Ticket park(Car car) {
-        if (this.parkNearFirst) {
-            return parkFromFirst(car);
+        for (int ii = 0; ii < parkingLots.size(); ii++) {
+            try {
+                Ticket ticket = parkingStrategy.park(parkingLots.get(ii), car, ii);
+                if (ticket != null) {
+                    return ticket;
+                }
+            } catch (ParkingLotFullException e) {
+                continue;
+            }
         }
 
-        return parkFromLast(car);
+        throw new ParkingLotFullException();
     }
 
     public Car unpark(Ticket ticket, String registrationNumber) {
@@ -66,27 +74,5 @@ public class Attendant {
         }
 
         return count;
-    }
-
-    private Ticket parkFromFirst(Car car) {
-        for (int ii = 0; ii < this.parkingLots.size(); ii++) {
-            ParkingLot parkingLot = this.parkingLots.get(ii);
-            if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlotFromFront() != null) {
-                return parkingLot.park(car, ii, this.parkNearFirst);
-            }
-        }
-
-        throw new ParkingLotFullException();
-    }
-
-    private Ticket parkFromLast(Car car) {
-        for (int ii = this.parkingLots.size() - 1; ii >= 0 ; ii--) {
-            ParkingLot parkingLot = this.parkingLots.get(ii);
-            if (!parkingLot.isAtFullCapacity() || parkingLot.getEmptySlotFromFront() != null) {
-                return parkingLot.park(car, ii, this.parkNearFirst);
-            }
-        }
-
-        throw new ParkingLotFullException();
     }
 }

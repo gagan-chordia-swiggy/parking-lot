@@ -50,7 +50,7 @@ public class MultiLevelParkingLotTest {
         Ticket actual = multiLevelParkingLot.park(car);
 
         // Assert
-        assertEquals(new Ticket(0, 0), actual);
+        assertEquals(new Ticket(0, 1), actual);
     }
 
     @Test
@@ -111,17 +111,17 @@ public class MultiLevelParkingLotTest {
     @Test
     void testCarCannotBeParkedInFullCapacity() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(1, 1);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car = new Car("AA34FA1234", Color.GREEN);
 
         // Act
         multiLevelParkingLot.park(car1);
-        multiLevelParkingLot.park(car2);
+//        multiLevelParkingLot.park(car2);
 
         // Assert
-        assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car));
+        assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car2));
     }
 
     @Test

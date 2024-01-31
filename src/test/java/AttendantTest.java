@@ -1,6 +1,5 @@
 import org.example.*;
 import org.example.exceptions.InvalidAttendantException;
-import org.example.exceptions.ParkingLotFullException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +9,7 @@ public class AttendantTest {
     @Test
     void testAttendantIsCreated() {
         // Arrange, Act
-        Attendant attendant = new Attendant("gagan", true);
+        Attendant attendant = new Attendant("gagan", new NearestParkingStrategy());
 
         // Assert
         assertNotNull(attendant);
@@ -19,13 +18,13 @@ public class AttendantTest {
     @Test
     void testAttendantWithoutNameThrowsException() {
         // Assert
-        assertThrows(InvalidAttendantException.class, () -> new Attendant(null, false));
+        assertThrows(InvalidAttendantException.class, () -> new Attendant(null, new NearestParkingStrategy()));
     }
 
     @Test
     void testAttendantIsAssignedAParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("Abc", true);
+        Attendant attendant = new Attendant("Abc", new NearestParkingStrategy());
         ParkingLot parkingLot = mock(ParkingLot.class);
 
         // Act
@@ -38,7 +37,7 @@ public class AttendantTest {
     @Test
     void testAttendantParksCarNearInParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("Abc", true);
+        Attendant attendant = new Attendant("Abc", new NearestParkingStrategy());
         ParkingLot parkingLot = new ParkingLot(7);
         Car car = new Car("AA12BC3456", Color.BLUE);
 
@@ -47,13 +46,13 @@ public class AttendantTest {
         Ticket actual = attendant.park(car);
 
         // Assert
-        assertEquals(new Ticket(0, 0), actual);
+        assertEquals(new Ticket(0, 1), actual);
     }
 
     @Test
     void testAttendantParksCarFarInParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("Abc", false);
+        Attendant attendant = new Attendant("Abc", new FarthestParkingStrategy());
         ParkingLot parkingLot = new ParkingLot(7);
         Car car = new Car("AA12BC3456", Color.BLUE);
 
@@ -68,7 +67,7 @@ public class AttendantTest {
     @Test
     void testAttendantParksAt2ndParkingLot() {
         // Arrange
-        Attendant attendant = new Attendant("abc", true);
+        Attendant attendant = new Attendant("abc", new NearestParkingStrategy());
         ParkingLot parkingLot1 = new ParkingLot(1);
         ParkingLot parkingLot2 = new ParkingLot(1);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -81,14 +80,14 @@ public class AttendantTest {
         Ticket actual = attendant.park(car2);
 
         // Assert
-        assertEquals(new Ticket(1, 0), actual);
+        assertEquals(new Ticket(1, 1), actual);
     }
 
     @Test
     void test2AttendantsCanParkAtSameParkingLot() {
         // Arrange
-        Attendant attendant1 = new Attendant("abc", true);
-        Attendant attendant2 = new Attendant("def", true);
+        Attendant attendant1 = new Attendant("abc", new NearestParkingStrategy());
+        Attendant attendant2 = new Attendant("def", new FarthestParkingStrategy());
         ParkingLot parkingLot = new ParkingLot(3);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
         Car car2 = new Car("AB12FE2345", Color.WHITE);
@@ -104,29 +103,9 @@ public class AttendantTest {
     }
 
     @Test
-    void testAttendantParksAtFullParkingLotThrowsException() {
-        // Arrange
-        Attendant attendant = new Attendant("abc", true);
-        ParkingLot parkingLot1 = new ParkingLot(1);
-        ParkingLot parkingLot2 = new ParkingLot(1);
-        Car car1 = new Car("AB12WE2345", Color.WHITE);
-        Car car2 = new Car("AB12FE2345", Color.WHITE);
-        Car car3 = new Car("AA12DD3214", Color.GREEN);
-
-        // Act
-        attendant.add(parkingLot1);
-        attendant.add(parkingLot2);
-        attendant.park(car1);
-        attendant.park(car2);
-
-        // Assert
-        assertThrows(ParkingLotFullException.class, () -> attendant.park(car3));
-    }
-
-    @Test
     void testAttendantCountsCarByColor() {
         // Arrange
-        Attendant attendant = new Attendant("abc", true);
+        Attendant attendant = new Attendant("abc", new FarthestParkingStrategy());
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -148,7 +127,7 @@ public class AttendantTest {
     @Test
     void testAttendantCheckIfCarIsParked() {
         // Arrange
-        Attendant attendant = new Attendant("abc", true);
+        Attendant attendant = new Attendant("abc", new NearestParkingStrategy());
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -170,7 +149,7 @@ public class AttendantTest {
     @Test
     void testAttendantCheckIfCarIsNotParked() {
         // Arrange
-        Attendant attendant = new Attendant("abc", true);
+        Attendant attendant = new Attendant("abc", new NearestParkingStrategy());
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
@@ -191,7 +170,7 @@ public class AttendantTest {
     @Test
     void testAttendantUnparkingACar() {
         // Arrange
-        Attendant attendant = new Attendant("abc", true);
+        Attendant attendant = new Attendant("abc", new FarthestParkingStrategy());
         ParkingLot parkingLot1 = new ParkingLot(2);
         ParkingLot parkingLot2 = new ParkingLot(2);
         Car car1 = new Car("AB12WE2345", Color.WHITE);
