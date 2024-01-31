@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.exceptions.InvalidAttendantException;
-import org.example.exceptions.ParkingLotFullException;
 import org.example.interfaces.ParkingLotSubscriber;
 import org.example.interfaces.ParkingStrategy;
 
@@ -33,29 +32,11 @@ public class Attendant implements ParkingLotSubscriber {
     }
 
     public Ticket park(Car car) {
-        for (int ii = 0; ii < parkingLots.size(); ii++) {
-            try {
-                Ticket ticket = parkingStrategy.park(parkingLots.get(ii), car, ii);
-                if (ticket != null) {
-                    return ticket;
-                }
-            } catch (ParkingLotFullException e) {
-                continue;
-            }
-        }
-
-        throw new ParkingLotFullException();
+        return parkingStrategy.park(parkingLots, car);
     }
 
     public Car unpark(Ticket ticket, String registrationNumber) {
-        for (ParkingLot parkingLot : this.parkingLots) {
-            Car car = parkingLot.unpark(ticket, registrationNumber);
-            if (car != null) {
-                return car;
-            }
-        }
-
-        return null;
+        return parkingLots.get(ticket.level()).unpark(ticket, registrationNumber);
     }
 
     public boolean isCarParked(Car car) {
