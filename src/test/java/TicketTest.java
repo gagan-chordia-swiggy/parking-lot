@@ -10,7 +10,7 @@ public class TicketTest {
     @Test
     void testTicketIsCreated() {
         // Arrange, Act
-        Ticket ticket = new Ticket(5, 3);
+        Ticket ticket = new Ticket(5, 3, 12);
 
         // Assert
         assertNotNull(ticket);
@@ -19,12 +19,12 @@ public class TicketTest {
     @Test
     void testNegativeLevelTicketThrowsException() {
         // Assert
-        assertThrows(InvalidTicketException.class, () -> new Ticket(-1, 3));
+        assertThrows(InvalidTicketException.class, () -> new Ticket(-1, 3, 7));
     }
 
     @Test
     void testNegativeSlotTicketThrowsException() {
         // Assert
-        assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3));
+        assertThrows(InvalidTicketException.class, () -> new Ticket(1, -3, 8));
     }
 }

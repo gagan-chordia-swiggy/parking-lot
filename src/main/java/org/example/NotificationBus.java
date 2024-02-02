@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.enums.ParkingLotEvent;
+import org.example.interfaces.ParkingLotPublisher;
 import org.example.interfaces.ParkingLotSubscriber;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class NotificationBus {
         return INSTANCE;
     }
 
-    public void publish(Object publisher, ParkingLotEvent event) {
+    public void publish(ParkingLotPublisher publisher, ParkingLotEvent event) {
         for (ParkingLotSubscriber subscriber : subscribers.get(event)) {
             subscriber.notify(event, publisher);
         }

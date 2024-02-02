@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.enums.Color;
 import org.example.exceptions.InvalidRegistrationNumberException;
 
 public record Car(String registrationNumber, Color color) {

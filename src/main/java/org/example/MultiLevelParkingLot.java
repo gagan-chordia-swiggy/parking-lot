@@ -1,12 +1,14 @@
 package org.example;
 
+import org.example.enums.Color;
+import org.example.enums.ParkingStrategy;
 import org.example.exceptions.ParkingLotFullException;
 
 public class MultiLevelParkingLot {
     private final ParkingLot[] parkingLots;
     private final int levels;
 
-    public MultiLevelParkingLot(int levels, int capacityOfParkingLots) {
+    public MultiLevelParkingLot(int levels, int capacityOfParkingLots, int cost) {
         if (levels < 1) {
             throw new IllegalArgumentException();
         }
@@ -15,7 +17,7 @@ public class MultiLevelParkingLot {
         this.parkingLots = new ParkingLot[levels];
 
         for (int ii = 0; ii < levels; ii++) {
-            this.parkingLots[ii] = new ParkingLot(capacityOfParkingLots);
+            this.parkingLots[ii] = new ParkingLot(capacityOfParkingLots, cost);
         }
     }
 
@@ -28,7 +30,7 @@ public class MultiLevelParkingLot {
             }
 
             if (!this.parkingLots[ii].isAtFullCapacity() || this.parkingLots[ii].getEmptySlotFromFront() != null) {
-                ticket = this.parkingLots[ii].park(car, ii, true);
+                ticket = this.parkingLots[ii].parkFromNearest(car, ii);
                 break;
             }
         }

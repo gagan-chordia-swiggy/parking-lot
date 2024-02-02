@@ -1,8 +1,12 @@
 package org.example;
 
+import org.example.enums.Color;
+import org.example.enums.ParkingLotEvent;
 import org.example.exceptions.InvalidAttendantException;
+import org.example.exceptions.ParkingLotFullException;
+import org.example.interfaces.ParkingLotPublisher;
 import org.example.interfaces.ParkingLotSubscriber;
-import org.example.interfaces.ParkingStrategy;
+import org.example.enums.ParkingStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,6 +16,7 @@ public class Attendant implements ParkingLotSubscriber {
     private final String name;
     private ParkingStrategy parkingStrategy;
     private final List<ParkingLot> parkingLots;
+    private int index = 0;
 
     public Attendant(String name, ParkingStrategy parkingStrategy) {
         if (name == null) {
@@ -36,7 +41,15 @@ public class Attendant implements ParkingLotSubscriber {
     }
 
     public Ticket park(Car car) {
-        return parkingStrategy.park(parkingLots, car);
+        if (this.parkingStrategy == ParkingStrategy.NEAREST) {
+            return parkNearBy(car);
+        }
+
+        if (this.parkingStrategy == ParkingStrategy.FARTHEST) {
+            return parkFarAway(car);
+        }
+
+        return parkDistributively(car);
     }
 
     public Car unpark(Ticket ticket, String registrationNumber) {
@@ -63,11 +76,57 @@ public class Attendant implements ParkingLotSubscriber {
     }
 
     @Override
-    public void notify(ParkingLotEvent event, Object publisher) {
+    public void notify(ParkingLotEvent event, ParkingLotPublisher publisher) {
         if (!parkingLots.contains((ParkingLot) publisher)) {
             return;
         }
 
         ParkingLotSubscriber.super.notify(event, publisher);
+    }
+
+    public Ticket parkNearBy(Car car) {
+        for (int ii = 0; ii < parkingLots.size(); ii++) {
+            ParkingLot lot = parkingLots.get(ii);
+            try {
+                if (!lot.isAtFullCapacity() || lot.getEmptySlotFromFront() != null) {
+                    return lot.parkFromNearest(car, ii);
+                }
+            } catch (ParkingLotFullException e) {
+                continue;
+            }
+        }
+
+        throw new ParkingLotFullException();
+    }
+
+    public Ticket parkFarAway(Car car) {
+        for (int ii = parkingLots.size() - 1; ii >= 0; ii--) {
+            ParkingLot lot = parkingLots.get(ii);
+            try {
+                if (!lot.isAtFullCapacity() || lot.getEmptySlotFromFront() != null) {
+                    return lot.parkFromFarthest(car, ii);
+                }
+            } catch (ParkingLotFullException e) {
+                continue;
+            }
+        }
+
+        throw new ParkingLotFullException();
+    }
+
+    public Ticket parkDistributively(Car car) {
+        for (int ii = 0; ii < parkingLots.size(); ii++) {
+            ParkingLot currentLot = parkingLots.get(index);
+
+            try {
+                Ticket ticket = currentLot.parkFromNearest(car, index);
+                index = (index + 1) % parkingLots.size();
+                return ticket;
+            } catch (ParkingLotFullException e) {
+                index = (index + 1) % parkingLots.size();
+            }
+        }
+
+        throw new ParkingLotFullException();
     }
 }

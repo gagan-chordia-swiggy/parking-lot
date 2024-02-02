@@ -1,20 +1,26 @@
 package org.example;
 
+import org.example.enums.Color;
 import org.example.exceptions.CarNotFoundException;
 import org.example.exceptions.ParkingLotFullException;
 import org.example.exceptions.SameCarParkedException;
-import org.example.interfaces.ParkingLotSubscriber;
+import org.example.interfaces.ParkingLotPublisher;
 
 import java.util.*;
 
-public class ParkingLot {
+public class ParkingLot implements ParkingLotPublisher {
     private final Map<Ticket, Car> parkingSlots;
     private int nextAvailableSlot;
     private int availableSlotFromEnd;
     private final int capacity;
+    private final int cost;
 
-    public ParkingLot(int capacity) {
+    public ParkingLot(int capacity, int cost) {
         if(capacity < 1) {
+            throw new IllegalArgumentException();
+        }
+
+        if (cost < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -22,12 +28,11 @@ public class ParkingLot {
         this.nextAvailableSlot = 1;
         this.capacity = capacity;
         this.availableSlotFromEnd = capacity;
+        this.cost = cost;
     }
 
-    public Ticket park(Car car, int level, boolean fromNearest) {
-        checkForSameCarParked(car);
-
-        return fromNearest ? parkFromNearest(car, level) : parkFromFarthest(car, level);
+    public int cost() {
+        return this.cost;
     }
 
     public boolean isCarParked(Car carToBeChecked) {
@@ -115,7 +120,7 @@ public class ParkingLot {
             throw new ParkingLotFullException();
         }
 
-        Ticket parkingTicket = new Ticket(level, this.nextAvailableSlot++);
+        Ticket parkingTicket = new Ticket(level, this.nextAvailableSlot++, this.cost);
 
         parkingSlots.put(parkingTicket, car);
         if (!isParkingAvailable()) {
@@ -137,20 +142,12 @@ public class ParkingLot {
             throw new ParkingLotFullException();
         }
 
-        Ticket parkingTicket = new Ticket(level, this.availableSlotFromEnd--);
+        Ticket parkingTicket = new Ticket(level, this.availableSlotFromEnd--, this.cost);
 
         parkingSlots.put(parkingTicket, car);
         if (!isParkingAvailable()) {
             notifyFull();
         }
         return parkingTicket;
-    }
-
-    private void notifyFull() {
-        NotificationBus.instance().publish(this, ParkingLotEvent.FULL);
-    }
-
-    private void notifyVacant() {
-        NotificationBus.instance().publish(this, ParkingLotEvent.EMPTY);
     }
 }

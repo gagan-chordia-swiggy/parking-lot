@@ -1,5 +1,5 @@
 import org.example.Car;
-import org.example.Color;
+import org.example.enums.Color;
 import org.example.MultiLevelParkingLot;
 import org.example.Ticket;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class MultiLevelParkingLotTest {
     @Test
     void testMultiLevelParkingLotsAreCreated() {
         // Arrange, Act
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1, 6);
 
         // Assert
         assertNotNull(multiLevelParkingLot);
@@ -22,41 +22,41 @@ public class MultiLevelParkingLotTest {
 
     @Test
     void testMultiLevelParkingLotWithCapacityZeroThrowsError() {
-        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, 0));
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, 0, 6));
     }
 
     @Test
     void testMultiLevelParkingLotWithNegativeCapacityThrowsError() {
-        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, -1));
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(2, -1, 0));
     }
 
     @Test
     void testMultiLevelParkingLotWithZeroLevelsThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(0, 12));
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(0, 12, 65));
     }
 
     @Test
     void testMultiLevelParkingLotWithNegative1LevelThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(-1, 12));
+        assertThrows(IllegalArgumentException.class, () -> new MultiLevelParkingLot(-1, 12, 7));
     }
 
     @Test
     void testParkingAtInitialLevelShouldReturnSlot() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2, 89);
         Car car = new Car("AB12FR1234", Color.WHITE);
 
         // Act
         Ticket actual = multiLevelParkingLot.park(car);
 
         // Assert
-        assertEquals(new Ticket(0, 1), actual);
+        assertEquals(new Ticket(0, 1, 89), actual);
     }
 
     @Test
     void testCarIsParkedInMultiLevelCarParking() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1, 9);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
 
@@ -72,7 +72,7 @@ public class MultiLevelParkingLotTest {
     @Test
     void testCarIsParkedInAnEmptySlotFromUnparkedLot() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2, 7);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car3 = new Car("AA34FA1234", Color.GREEN);
@@ -94,7 +94,7 @@ public class MultiLevelParkingLotTest {
     @Test
     void testCarIsNotParkedInMultiLevelCarParking() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 1, 7);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car = new Car("AA34FA1234", Color.GREEN);
@@ -111,14 +111,13 @@ public class MultiLevelParkingLotTest {
     @Test
     void testCarCannotBeParkedInFullCapacity() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(1, 1);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(1, 1, 7);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car = new Car("AA34FA1234", Color.GREEN);
 
         // Act
         multiLevelParkingLot.park(car1);
-//        multiLevelParkingLot.park(car2);
 
         // Assert
         assertThrows(RuntimeException.class, () -> multiLevelParkingLot.park(car2));
@@ -127,7 +126,7 @@ public class MultiLevelParkingLotTest {
     @Test
     void test3WhiteCarsArePresentInMultiLevelParkingLot() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2, 6);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car3 = new Car("AA34FA1234", Color.GREEN);
@@ -147,7 +146,7 @@ public class MultiLevelParkingLotTest {
     @Test
     void testUnparkingACarFromMultiLevelParkingLot() {
         // Arrange
-        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2);
+        MultiLevelParkingLot multiLevelParkingLot = new MultiLevelParkingLot(2, 2, 2);
         Car car1 = new Car("AB12FR1234", Color.WHITE);
         Car car2 = new Car("AA12FR1234", Color.WHITE);
         Car car3 = new Car("AA34FA1234", Color.GREEN);

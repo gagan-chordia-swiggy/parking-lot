@@ -1,5 +1,5 @@
 import org.example.Car;
-import org.example.Color;
+import org.example.enums.Color;
 import org.example.exceptions.InvalidRegistrationNumberException;
 
 import org.junit.jupiter.api.Test;
